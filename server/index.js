@@ -1,7 +1,7 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-const { getTasks } = require('./database/models');
+const { getTasks, addTask } = require('./database/models');
 const cors = require('cors');
 const app = express();
 
@@ -10,8 +10,9 @@ app.use(cors());
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
+
   type Task {
-    task: String,
+    task: String!
     completed: Boolean
   }
 
@@ -19,22 +20,24 @@ const schema = buildSchema(`
     getTasks: [Task]
   }
 
-  schema {
-    query: Query
+  type Mutation {
+    addTask(task: String!): Task!
   }
 `);
 
 // The root provides a resolver function for each API endpoint
 const root = {
-  getTasks
+  getTasks,
+  addTask: addTask
 };
 
+// console.log('add a task', addTask({input: {task: 'Run'}}))
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
   graphiql: true,
 }));
-
+// console.log('ddid it work add', addTask({task: 'Run 2 marathons'}))
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
