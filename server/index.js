@@ -1,7 +1,7 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-const { getTasks, addTask } = require('./database/models');
+const { getTasks, addTask, updateTask } = require('./database/models');
 const cors = require('cors');
 const app = express();
 
@@ -22,13 +22,15 @@ const schema = buildSchema(`
 
   type Mutation {
     addTask(task: String!): Task!
+    updateTask(task: String!, completed: Boolean!): Task!
   }
 `);
 
 // The root provides a resolver function for each API endpoint
 const root = {
   getTasks,
-  addTask: addTask
+  addTask,
+  updateTask
 };
 
 // console.log('add a task', addTask({input: {task: 'Run'}}))

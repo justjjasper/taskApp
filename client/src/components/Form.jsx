@@ -32,6 +32,7 @@ export default function Form( {refetch} ) {
   const [addTask, { data }] = useMutation(ADD_TASK)
 
   const handleClick = async () => {
+    if (inputRef.current.value === '') return alert('Don\'t leave any blanks')
     addTask({variables: {task:inputRef.current.value}})
     inputRef.current.value = ''
     refetch()
