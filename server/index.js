@@ -1,7 +1,7 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
-const { getTasks, addTask, updateTask } = require('./database/models');
+const { getTasks, addTask, updateTask, deleteTask } = require('./database/models');
 const cors = require('cors');
 const app = express();
 
@@ -23,6 +23,7 @@ const schema = buildSchema(`
   type Mutation {
     addTask(task: String!): Task!
     updateTask(task: String!, completed: Boolean!): Task!
+    deleteTask(task: String!): Task!
   }
 `);
 
@@ -30,7 +31,8 @@ const schema = buildSchema(`
 const root = {
   getTasks,
   addTask,
-  updateTask
+  updateTask,
+  deleteTask
 };
 
 // console.log('add a task', addTask({input: {task: 'Run'}}))

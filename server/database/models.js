@@ -17,20 +17,30 @@ const addTask = async ( {task} ) => {
     VALUES ('${task}', false)`
   )
 
-  return {task, completed: false}
+  return {task}
 };
 
-const updateTask = async ( task ) => {
-  console.log('what is the task', task)
+const updateTask = async ( {task, completed} ) => {
+  console.log('what is the updated task', task)
   const results = await pool.query(
     `UPDATE tasks
-    SET completed = ${!task.completed}
-    WHERE task = '${task.task}'`
+    SET completed = ${!completed}
+    WHERE task = '${task}'`
   )
-  console.log('the results are in', results)
-  return {task: task.task, completed: !task.completed}
+  return {task: task, completed: completed}
+};
+
+const deleteTask = async ( {task} ) => {
+  console.log('what is the task delete', task)
+  const results = await pool.query(
+    `DELETE FROM tasks
+    WHERE task = '${task}'`
+  )
+
+  return {task}
 }
 
 module.exports.getTasks = getTasks;
 module.exports.addTask = addTask
 module.exports.updateTask = updateTask
+module.exports.deleteTask = deleteTask

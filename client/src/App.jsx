@@ -24,7 +24,7 @@ function App() {
     <div className="App">
       <h3> Task App </h3>
       <Form refetch={refetch}/>
-      <Tasks data={data}/>
+      <Tasks data={data} refetch={refetch}/>
     </div>
   )
 }
